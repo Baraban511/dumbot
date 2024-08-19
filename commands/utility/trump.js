@@ -1,10 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
-
-export default {
+const axios = require('axios');
+module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('ping')
-		.setDescription('Replies with Pong!'),
+		.setName('trump')
+		.setDescription('A famous Trump dumb quote.'),
 	async execute(interaction) {
-		await interaction.reply('Pong!');
+        var dumbQuote = await axios.get("https://www.tronalddump.io/random/quote");
+		await interaction.reply(dumbQuote.data.value);
 	},
 };
