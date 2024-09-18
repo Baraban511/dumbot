@@ -1,12 +1,17 @@
 const dotenv = require('dotenv');
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Events, GatewayIntentBits, Collection} = require('discord.js');
+const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 dotenv.config();
 const token = process.env.TOKEN;
-
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences
+    ]
+});
 client.commands = new Collection();
 
 const foldersPath = path.join(__dirname, 'commands');
@@ -32,6 +37,13 @@ client.once(Events.ClientReady, readyClient => {
 });
 
 client.on(Events.InteractionCreate, async interaction => {
+    const guildId = ""
+    const userID = ""
+    const guild = await client.guilds.fetch(guildId);
+    const member = await guild.members.fetch(userID);
+    //const member = guild.members.fetch(userID);
+    //const presence = member.presence;
+    console.log(member.presence);
     if (!interaction.isChatInputCommand()) return;
 
     const command = interaction.client.commands.get(interaction.commandName);
